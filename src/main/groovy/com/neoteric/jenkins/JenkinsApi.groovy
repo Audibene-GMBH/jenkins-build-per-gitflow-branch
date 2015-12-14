@@ -61,8 +61,6 @@ class JenkinsApi {
 		String missingJobConfig = configForMissingJob(missingJob, gitUrl)
 		TemplateJob templateJob = missingJob.templateJob
 
-		println "-----> GOT HERE "
-
 		//Copy job with jenkins copy job api, this will make sure jenkins plugins get the call to make a copy if needed (promoted builds plugin needs this)
 		post(createJobInViewPath + 'createItem', missingJobConfig, [name: missingJob.jobName, mode: 'copy', from: templateJob.jobName], ContentType.XML)
 
@@ -85,6 +83,9 @@ class JenkinsApi {
 	}
 
 	String configForMissingJob(ConcreteJob missingJob, String gitUrl) {
+
+		println "-----> GOT HERE "
+		
 		TemplateJob templateJob = missingJob.templateJob
 		String config = getJobConfig(templateJob.jobName)
 		return processConfig(config, missingJob.branchName, gitUrl)
