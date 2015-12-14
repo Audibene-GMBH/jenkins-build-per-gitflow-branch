@@ -112,7 +112,6 @@ class JenkinsApi {
 			startOnCreateParam.parent().remove(startOnCreateParam)
 		}
 
-		println "-----> GOT HERE "
 		
 		//check if it was the only parameter - if so, remove the enclosing tag, so the project won't be seen as build with parameters
 		def propertiesNode = root.properties
@@ -123,6 +122,7 @@ class JenkinsApi {
 			new Node(root, 'properties')
 		}
 		
+		println "-----> GOT HERE "
 		
 		def writer = new StringWriter()
 		XmlNodePrinter xmlPrinter = new XmlNodePrinter(new PrintWriter(writer))
