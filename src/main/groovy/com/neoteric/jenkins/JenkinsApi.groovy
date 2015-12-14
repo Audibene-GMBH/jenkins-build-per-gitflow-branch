@@ -87,15 +87,17 @@ class JenkinsApi {
 		TemplateJob templateJob = missingJob.templateJob
 		String config = getJobConfig(templateJob.jobName)
 
-		println "-----> GOT HERE "
-		
 		return processConfig(config, missingJob.branchName, gitUrl)
 	}
 
 	public String processConfig(String entryConfig, String branchName, String gitUrl) {
+
+
 		def root = new XmlParser().parseText(entryConfig)
 		// update branch name
 		root.scm.branches."hudson.plugins.git.BranchSpec".name[0].value = "*/$branchName"
+
+		println "-----> GOT HERE "
 		
 		// update GIT url
 		root.scm.userRemoteConfigs."hudson.plugins.git.UserRemoteConfig".url[0].value = "$gitUrl"
