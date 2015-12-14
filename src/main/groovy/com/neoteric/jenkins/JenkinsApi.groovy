@@ -117,7 +117,10 @@ class JenkinsApi {
 		def propertiesNode = root.properties
 		def parameterDefinitionsProperty = propertiesNode."hudson.model.ParametersDefinitionProperty".parameterDefinitions[0]
 		
-
+		//if(!parameterDefinitionsProperty.attributes() && !parameterDefinitionsProperty.children() && !parameterDefinitionsProperty.text()) {
+		//	root.remove(propertiesNode)
+		//	new Node(root, 'properties')
+		//}
 		
 		def writer = new StringWriter()
 		XmlNodePrinter xmlPrinter = new XmlNodePrinter(new PrintWriter(writer))
