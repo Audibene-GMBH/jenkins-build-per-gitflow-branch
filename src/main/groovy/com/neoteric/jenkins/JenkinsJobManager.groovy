@@ -16,9 +16,9 @@ class JenkinsJobManager {
 	Boolean noDelete = false
 	Boolean startOnCreate = false
 
-	String featureSuffix = "feature-"
-	String hotfixSuffix = "hotfix-"
-	String releaseSuffix = "release-"
+	String featureSuffix = "feature/WEB-"
+	String hotfixSuffix = "hotfix/v"
+	String releaseSuffix = "release/v"
 
 	String templateFeatureSuffix = "feature"
 	String templateHotfixSuffix = "hotfix"
