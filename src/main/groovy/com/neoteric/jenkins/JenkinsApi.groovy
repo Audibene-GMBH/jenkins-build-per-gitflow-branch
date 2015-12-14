@@ -84,9 +84,10 @@ class JenkinsApi {
 
 	String configForMissingJob(ConcreteJob missingJob, String gitUrl) {
 
+		TemplateJob templateJob = missingJob.templateJob
+
 		println "-----> GOT HERE "
 		
-		TemplateJob templateJob = missingJob.templateJob
 		String config = getJobConfig(templateJob.jobName)
 		return processConfig(config, missingJob.branchName, gitUrl)
 	}
