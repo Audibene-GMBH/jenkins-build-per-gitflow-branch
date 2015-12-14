@@ -61,6 +61,8 @@ class JenkinsApi {
 		String missingJobConfig = configForMissingJob(missingJob, gitUrl)
 		TemplateJob templateJob = missingJob.templateJob
 
+		println "-----> GOT HERE "
+
 		//Copy job with jenkins copy job api, this will make sure jenkins plugins get the call to make a copy if needed (promoted builds plugin needs this)
 		post(createJobInViewPath + 'createItem', missingJobConfig, [name: missingJob.jobName, mode: 'copy', from: templateJob.jobName], ContentType.XML)
 
@@ -96,8 +98,6 @@ class JenkinsApi {
 		def root = new XmlParser().parseText(entryConfig)
 		// update branch name
 		root.scm.branches."hudson.plugins.git.BranchSpec".name[0].value = "*/$branchName"
-
-		println "-----> GOT HERE "
 		
 		// update GIT url
 		root.scm.userRemoteConfigs."hudson.plugins.git.UserRemoteConfig".url[0].value = "$gitUrl"
