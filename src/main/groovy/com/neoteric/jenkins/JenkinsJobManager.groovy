@@ -102,11 +102,13 @@ class JenkinsJobManager {
 				expectedJobsPerBranch.each { println "           $it" }
 				List<String> jobNamesPerBranch = jobNames.findAll{ it.endsWith(branchToProcess) }
 				println "-------> Job Names per branch:"
+				println jobNamesPerBranch
 				jobNamesPerBranch.each { println "           $it" }
 				List<ConcreteJob> missingJobsPerBranch = expectedJobsPerBranch.findAll { expectedJob ->
 					!jobNamesPerBranch.any {it.contains(expectedJob.jobName) }
 				}
 				println "-------> Missing jobs:"
+				println missingJobsPerBranch
 				missingJobsPerBranch.each { println "           $it" }
 				missingJobs.addAll(missingJobsPerBranch)
 			}
