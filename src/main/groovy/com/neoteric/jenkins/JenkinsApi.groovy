@@ -50,7 +50,7 @@ class JenkinsApi {
 	}
 
 	String getJobConfig(String jobName) {
-		def response = get(path: "job/${jobName}/config.xml", contentType: TEXT,
+		def response = get(path: "job/Website/job/${jobName}/config.xml", contentType: TEXT,
 		headers: [Accept: 'application/xml'])
 		response.data.text
 	}
@@ -64,12 +64,12 @@ class JenkinsApi {
 		//Copy job with jenkins copy job api, this will make sure jenkins plugins get the call to make a copy if needed (promoted builds plugin needs this)
 		post(createJobInViewPath + 'createItem', missingJobConfig, [name: missingJob.jobName, mode: 'copy', from: templateJob.jobName], ContentType.XML)
 
-		post('job/' + missingJob.jobName + "/config.xml", missingJobConfig, [:], ContentType.XML)
+		post('job/Website/job/' + missingJob.jobName + "/config.xml", missingJobConfig, [:], ContentType.XML)
 		//Forced disable enable to work around Jenkins' automatic disabling of clones jobs
 		//But only if the original job was enabled
-		post('job/' + missingJob.jobName + '/disable')
+		post('job/Website/job/' + missingJob.jobName + '/disable')
 		if (!missingJobConfig.contains("<disabled>true</disabled>")) {
-			post('job/' + missingJob.jobName + '/enable')
+			post('job/Website/job/' + missingJob.jobName + '/enable')
 		}
 	}
 
@@ -133,7 +133,7 @@ class JenkinsApi {
 		String templateConfig = getJobConfig(job.templateJob.jobName)
 		if (shouldStartJob(templateConfig)) {
 			println "Starting job ${job.jobName}."
-			post('job/' + job.jobName + '/build')
+			post('job/Website/job/' + job.jobName + '/build')
 		}
 	}
 	
@@ -154,7 +154,7 @@ class JenkinsApi {
 
 	void deleteJob(String jobName) {
 		println "deleting job $jobName"
-		post("job/${jobName}/doDelete")
+		post("job/Website/job/${jobName}/doDelete")
 	}
 
 	protected get(Map map) {
