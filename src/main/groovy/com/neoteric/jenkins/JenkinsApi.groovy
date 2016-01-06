@@ -42,7 +42,7 @@ class JenkinsApi {
 	}
 
 	List<String> getJobNames(String prefix = null) {
-		println "getting project names from " + jenkinsServerUrl + "api/json"
+		println "getting project names from " + jenkinsServerUrl + "job/Website/api/json"
 		def response = get(path: 'api/json')
 		def jobNames = response.data.jobs.name
 		if (prefix) return jobNames.findAll { it.startsWith(prefix) }
