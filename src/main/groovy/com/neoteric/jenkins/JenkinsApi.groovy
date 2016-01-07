@@ -17,6 +17,7 @@ class JenkinsApi {
 	
 	final String SHOULD_START_PARAM_NAME = "startOnCreate"
 	String jenkinsServerUrl
+	String urlPrefix = 'job/Website/'
 	RESTClient restClient
 	HttpRequestInterceptor requestInterceptor
 	boolean findCrumb = true
@@ -42,15 +43,15 @@ class JenkinsApi {
 	}
 
 	List<String> getJobNames(String prefix = null) {
-		println "getting project names from " + jenkinsServerUrl + "job/Website/api/json"
-		def response = get(path: 'job/Website/api/json')
+		println "getting project names from " + jenkinsServerUrl + urlPrefix + "api/json"
+		def response = get(path: urlPrefix + 'api/json')
 		def jobNames = response.data.jobs.name
 		if (prefix) return jobNames.findAll { it.startsWith(prefix) }
 		return jobNames
 	}
 
 	String getJobConfig(String jobName) {
-		def response = get(path: "job/Website/job/${jobName}/config.xml", contentType: TEXT,
+		def response = get(path: urlPrefix + "job/${jobName}/config.xml", contentType: TEXT,
 		headers: [Accept: 'application/xml'])
 		response.data.text
 	}
@@ -62,14 +63,14 @@ class JenkinsApi {
 		TemplateJob templateJob = missingJob.templateJob
 
 		//Copy job with jenkins copy job api, this will make sure jenkins plugins get the call to make a copy if needed (promoted builds plugin needs this)
-		post('job/Website/' + createJobInViewPath + 'createItem', missingJobConfig, [name: missingJob.jobName, mode: 'copy', from: templateJob.jobName], ContentType.XML)
+		post(urlPrefix + createJobInViewPath + 'createItem', missingJobConfig, [name: missingJob.jobName, mode: 'copy', from: templateJob.jobName], ContentType.XML)
 
-		post('job/Website/job/' + missingJob.jobName + "/config.xml", missingJobConfig, [:], ContentType.XML)
+		post(urlprefix + 'job/' + missingJob.jobName + "/config.xml", missingJobConfig, [:], ContentType.XML)
 		//Forced disable enable to work around Jenkins' automatic disabling of clones jobs
 		//But only if the original job was enabled
-		post('job/Website/job/' + missingJob.jobName + '/disable')
+		post(urlPrefix + 'job/' + missingJob.jobName + '/disable')
 		if (!missingJobConfig.contains("<disabled>true</disabled>")) {
-			post('job/Website/job/' + missingJob.jobName + '/enable')
+			post(urlPrefix + 'job/' + missingJob.jobName + '/enable')
 		}
 	}
 
@@ -133,7 +134,7 @@ class JenkinsApi {
 		String templateConfig = getJobConfig(job.templateJob.jobName)
 		if (shouldStartJob(templateConfig)) {
 			println "Starting job ${job.jobName}."
-			post('job/Website/job/' + job.jobName + '/build')
+			post(urlPrefix + 'job/' + job.jobName + '/build')
 		}
 	}
 	
@@ -154,7 +155,7 @@ class JenkinsApi {
 
 	void deleteJob(String jobName) {
 		println "deleting job $jobName"
-		post("job/Website/job/${jobName}/doDelete")
+		post(urlPrefix + "job/${jobName}/doDelete")
 	}
 
 	protected get(Map map) {
