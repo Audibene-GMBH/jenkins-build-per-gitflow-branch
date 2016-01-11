@@ -14,7 +14,6 @@ import org.apache.http.HttpRequest
 
 class JenkinsApi {
 	
-	
 	final String SHOULD_START_PARAM_NAME = "startOnCreate"
 	String jenkinsServerUrl
 	String urlPrefix = 'job/Website/'
@@ -65,7 +64,7 @@ class JenkinsApi {
 		//Copy job with jenkins copy job api, this will make sure jenkins plugins get the call to make a copy if needed (promoted builds plugin needs this)
 		post(urlPrefix + createJobInViewPath + 'createItem', missingJobConfig, [name: missingJob.jobName, mode: 'copy', from: templateJob.jobName], ContentType.XML)
 
-		post(urlprefix + 'job/' + missingJob.jobName + "/config.xml", missingJobConfig, [:], ContentType.XML)
+		post(urlPrefix + 'job/' + missingJob.jobName + "/config.xml", missingJobConfig, [:], ContentType.XML)
 		//Forced disable enable to work around Jenkins' automatic disabling of clones jobs
 		//But only if the original job was enabled
 		post(urlPrefix + 'job/' + missingJob.jobName + '/disable')
