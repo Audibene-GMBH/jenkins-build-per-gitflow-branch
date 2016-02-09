@@ -15,20 +15,17 @@ import org.apache.http.HttpRequest
 class JenkinsApi {
 	
 	final String SHOULD_START_PARAM_NAME = "startOnCreate"
-	String jenkinsServerProtocol = 'http://'
-	String jenkinsServerUrl = '127.0.0.1:8080'
-	String jenkinsServerUser = 'ci-website'
-	String jenkinsServerToken = '10afb5d4e0703cc3b6be77fa5fd4f38e'
+	String jenkinsServerUrl
 	String urlPrefix = 'job/Website/'
 	RESTClient restClient
 	HttpRequestInterceptor requestInterceptor
 	boolean findCrumb = true
 	def crumbInfo
 
-	public void setJenkinsServerUrl() {
-		if (!this.jenkinsServerUrl.endsWith("/")) this.jenkinsServerUrl += "/"
-		this.jenkinsServerUrl = this.jenkinsServerProtocol + this.jenkinsServerUser + ':' + this.jenkinsServerToken + '@' + this.jenkinsServerUrl
-		this.restClient = new RESTClient(this.jenkinsServerUrl)
+	public void setJenkinsServerUrl(String jenkinsServerUrl) {
+		if (!jenkinsServerUrl.endsWith("/")) jenkinsServerUrl += "/"
+		this.jenkinsServerUrl = jenkinsServerUrl
+		this.restClient = new RESTClient(jenkinsServerUrl)
 	}
 
 	public void addBasicAuth(String jenkinsServerUser, String jenkinsServerPassword) {
